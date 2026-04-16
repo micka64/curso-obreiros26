@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Curso de Obreiros</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body style="background:black;color:white;text-align:center;font-family:sans-serif">
+
+<h1>📖 Curso de Obreiros</h1>
+<p>Se o chamado é de Deus, Ele mesmo sustenta.</p>
+
+</body>
+</html>
