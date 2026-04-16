@@ -1,162 +1,294 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { CheckCircle, Sparkles, BookOpen, Church } from "lucide-react";
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Curso de Preparação de Obreiros</title>
 
-export default function ObreirosSlide() {
-  const [step, setStep] = useState(0);
-  const [score, setScore] = useState(0);
-  const [answered, setAnswered] = useState(false);
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
-  const quiz = {
-    question: "Qual é uma característica essencial de um obreiro?",
-    options: [
-      "Serviço e humildade",
-      "Apenas conhecimento teórico",
-      "Fama e destaque",
-      "Competição entre líderes"
-    ],
-    correct: 0
-  };
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e3a8a, #6b21a8);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      overflow: hidden;
+      padding: 20px;
+      box-sizing: border-box;
+    }
 
-  const next = () => setStep((s) => Math.min(s + 1, 3));
+    .container {
+      width: 90%;
+      max-width: 900px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.5);
+      animation: fadeIn 0.8s ease-in-out;
+    }
 
-  const handleAnswer = (i) => {
-    if (answered) return;
-    setAnswered(true);
-    if (i === quiz.correct) setScore(score + 1);
-  };
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-black text-white p-6">
-      <div className="max-w-5xl mx-auto space-y-6">
+    .logo {
+      width: 120px;
+      margin-bottom: 20px;
+      border-radius: 20px;
+    }
 
-        {/* HERO */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center space-y-3"
-        >
-          <Church size={42} className="mx-auto text-yellow-300" />
-          <h1 className="text-4xl font-bold">Curso de Obreiros</h1>
-          <p className="text-gray-300">
-            Formação espiritual e prática para servir com excelência
-          </p>
-        </motion.div>
+    h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+      color: #facc15;
+    }
 
-        {/* PROGRESS */}
-        <Progress value={(step / 3) * 100} />
+    h2 {
+      font-size: 24px;
+      margin-bottom: 15px;
+      color: #38bdf8;
+    }
 
-        {/* SLIDES */}
-        <AnimatePresence mode="wait">
-          {step === 0 && (
-            <motion.div
-              key="intro"
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 50 }}
-            >
-              <Card className="bg-white/10 border-white/20">
-                <CardContent className="p-6 space-y-3">
-                  <h2 className="text-2xl font-semibold">Bem-vindo ao curso</h2>
-                  <p>
-                    Aqui você vai aprender princípios bíblicos, liderança,
-                    disciplina espiritual e serviço na obra.
-                  </p>
-                  <Button onClick={next} className="mt-4">
-                    Começar <Sparkles className="ml-2" size={16} />
-                  </Button>
-                </CardContent>
-              </Card>
-            </motion.div>
-          )}
+    #lesson {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
 
-          {step === 1 && (
-            <motion.div
-              key="modules"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="grid md:grid-cols-3 gap-4"
-            >
-              {[
-                "Doutrina",
-                "Liderança",
-                "Serviço",
-              ].map((m, i) => (
-                <Card key={i} className="bg-white/10 border-white/20">
-                  <CardContent className="p-4 text-center">
-                    <BookOpen className="mx-auto mb-2" />
-                    <p className="font-semibold">{m}</p>
-                  </CardContent>
-                </Card>
-              ))}
+    ul {
+      list-style: none;
+      padding: 0;
+      text-align: left;
+      margin-top: 20px;
+    }
 
-              <div className="md:col-span-3 text-center">
-                <Button onClick={next}>Continuar</Button>
-              </div>
-            </motion.div>
-          )}
+    ul li {
+      font-size: 18px;
+      margin: 10px 0;
+      padding-left: 25px;
+      position: relative;
+      line-height: 1.5;
+    }
 
-          {step === 2 && (
-            <motion.div
-              key="quiz"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <Card className="bg-white/10 border-white/20">
-                <CardContent className="p-6 space-y-4">
-                  <h2 className="text-xl font-semibold">Quiz rápido</h2>
-                  <p>{quiz.question}</p>
+    ul li::before {
+      content: "✦";
+      position: absolute;
+      left: 0;
+      color: #facc15;
+      font-size: 18px;
+    }
 
-                  <div className="grid gap-2">
-                    {quiz.options.map((opt, i) => (
-                      <Button
-                        key={i}
-                        variant="outline"
-                        onClick={() => handleAnswer(i)}
-                        className="justify-start"
-                      >
-                        {opt}
-                      </Button>
-                    ))}
-                  </div>
+    .controls {
+      margin-top: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
 
-                  {answered && (
-                    <div className="flex items-center gap-2 text-green-300">
-                      <CheckCircle />
-                      {score > 0 ? "Correto!" : "Resposta registrada"}
-                    </div>
-                  )}
+    button {
+      background: linear-gradient(45deg, #22c55e, #16a34a);
+      border: none;
+      color: white;
+      padding: 12px 25px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
 
-                  <Button onClick={next} disabled={!answered}>
-                    Finalizar
-                  </Button>
-                </CardContent>
-              </Card>
-            </motion.div>
-          )}
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(255,255,255,0.3);
+    }
 
-          {step === 3 && (
-            <motion.div
-              key="final"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center space-y-4"
-            >
-              <Sparkles className="mx-auto text-yellow-300" size={50} />
-              <h2 className="text-3xl font-bold">Parabéns!</h2>
-              <p className="text-gray-300">
-                Você concluiu a apresentação do curso de obreiros.
-              </p>
-              <Button onClick={() => setStep(0)}>Recomeçar</Button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </div>
-  );
+    .progress {
+      font-size: 14px;
+      color: #cbd5f5;
+      flex: 1;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 24px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+
+      #lesson {
+        font-size: 18px;
+      }
+
+      ul li {
+        font-size: 16px;
+      }
+
+      .controls {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      .progress {
+        order: -1;
+        margin-bottom: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <img src="icon.png" alt="Logo da Igreja" class="logo">
+
+  <h1>Curso de Preparação de Obreiros</h1>
+  <h2 id="module"></h2>
+  <p id="lesson"></p>
+  <ul id="topics"></ul>
+
+  <div class="controls">
+    <button onclick="prev()">◀ Anterior</button>
+    <div class="progress" id="progress"></div>
+    <button onclick="next()">Próximo ▶</button>
+  </div>
+</div>
+
+<script>
+const course = [
+  {
+    module: "📖 Módulo 1 — Chamado Ministerial",
+    lessons: [
+      {
+        title: "Aula 1 — O Chamado Divino",
+        topics: [
+          "Chamado antes do nascimento (Jeremias 1:5)",
+          "Vocação como iniciativa soberana de Deus",
+          "Confirmação espiritual e eclesiástica",
+          "Responsabilidade ministerial"
+        ]
+      },
+      {
+        title: "Aula 2 — Processos do Chamado",
+        topics: [
+          "O deserto como lugar de formação",
+          "Tempo de preparo oculto",
+          "Provação e maturidade",
+          "Fruto antes da plataforma"
+        ]
+      }
+    ]
+  },
+  {
+    module: "🔥 Módulo 2 — Caráter e Vida Espiritual",
+    lessons: [
+      {
+        title: "Aula 1 — Santidade",
+        topics: [
+          "Separação do pecado",
+          "Romanos 12 e a transformação da mente",
+          "Consistência dentro e fora do púlpito",
+          "Vida de oração"
+        ]
+      },
+      {
+        title: "Aula 2 — Fruto do Espírito",
+        topics: [
+          "Gálatas 5:22-23",
+          "Caráter acima dos dons",
+          "Domínio próprio",
+          "Evidência de maturidade espiritual"
+        ]
+      }
+    ]
+  },
+  {
+    module: "📜 Módulo 3 — Doutrinas Bíblicas",
+    lessons: [
+      {
+        title: "Aula 1 — Autoridade das Escrituras",
+        topics: [
+          "A Bíblia como Palavra inspirada por Deus",
+          "Fundamento da fé e da prática cristã",
+          "O perigo de opiniões acima da Escritura",
+          "Leitura reverente e obediente"
+        ]
+      },
+      {
+        title: "Aula 2 — Cristo no Centro",
+        topics: [
+          "Cristo como revelação perfeita de Deus",
+          "A cruz como centro da mensagem",
+          "Pregação cristocêntrica",
+          "Vida e ministério apontando para Jesus"
+        ]
+      }
+    ]
+  }
+];
+
+let moduleIndex = 0;
+let lessonIndex = 0;
+
+function render() {
+  const mod = course[moduleIndex];
+  const lesson = mod.lessons[lessonIndex];
+
+  document.getElementById("module").innerText = mod.module;
+  document.getElementById("lesson").innerText = lesson.title;
+
+  const topicsList = document.getElementById("topics");
+  topicsList.innerHTML = "";
+
+  lesson.topics.forEach(topic => {
+    const li = document.createElement("li");
+    li.textContent = topic;
+    topicsList.appendChild(li);
+  });
+
+  document.getElementById("progress").innerText =
+    `Módulo ${moduleIndex + 1} | Aula ${lessonIndex + 1} de ${mod.lessons.length}`;
 }
+
+function next() {
+  if (lessonIndex < course[moduleIndex].lessons.length - 1) {
+    lessonIndex++;
+  } else if (moduleIndex < course.length - 1) {
+    moduleIndex++;
+    lessonIndex = 0;
+  }
+  render();
+}
+
+function prev() {
+  if (lessonIndex > 0) {
+    lessonIndex--;
+  } else if (moduleIndex > 0) {
+    moduleIndex--;
+    lessonIndex = course[moduleIndex].lessons.length - 1;
+  }
+  render();
+}
+
+render();
+</script>
+
+</body>
+</html>
