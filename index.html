@@ -1,0 +1,162 @@
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { CheckCircle, Sparkles, BookOpen, Church } from "lucide-react";
+
+export default function ObreirosSlide() {
+  const [step, setStep] = useState(0);
+  const [score, setScore] = useState(0);
+  const [answered, setAnswered] = useState(false);
+
+  const quiz = {
+    question: "Qual é uma característica essencial de um obreiro?",
+    options: [
+      "Serviço e humildade",
+      "Apenas conhecimento teórico",
+      "Fama e destaque",
+      "Competição entre líderes"
+    ],
+    correct: 0
+  };
+
+  const next = () => setStep((s) => Math.min(s + 1, 3));
+
+  const handleAnswer = (i) => {
+    if (answered) return;
+    setAnswered(true);
+    if (i === quiz.correct) setScore(score + 1);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-black text-white p-6">
+      <div className="max-w-5xl mx-auto space-y-6">
+
+        {/* HERO */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center space-y-3"
+        >
+          <Church size={42} className="mx-auto text-yellow-300" />
+          <h1 className="text-4xl font-bold">Curso de Obreiros</h1>
+          <p className="text-gray-300">
+            Formação espiritual e prática para servir com excelência
+          </p>
+        </motion.div>
+
+        {/* PROGRESS */}
+        <Progress value={(step / 3) * 100} />
+
+        {/* SLIDES */}
+        <AnimatePresence mode="wait">
+          {step === 0 && (
+            <motion.div
+              key="intro"
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 50 }}
+            >
+              <Card className="bg-white/10 border-white/20">
+                <CardContent className="p-6 space-y-3">
+                  <h2 className="text-2xl font-semibold">Bem-vindo ao curso</h2>
+                  <p>
+                    Aqui você vai aprender princípios bíblicos, liderança,
+                    disciplina espiritual e serviço na obra.
+                  </p>
+                  <Button onClick={next} className="mt-4">
+                    Começar <Sparkles className="ml-2" size={16} />
+                  </Button>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
+
+          {step === 1 && (
+            <motion.div
+              key="modules"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="grid md:grid-cols-3 gap-4"
+            >
+              {[
+                "Doutrina",
+                "Liderança",
+                "Serviço",
+              ].map((m, i) => (
+                <Card key={i} className="bg-white/10 border-white/20">
+                  <CardContent className="p-4 text-center">
+                    <BookOpen className="mx-auto mb-2" />
+                    <p className="font-semibold">{m}</p>
+                  </CardContent>
+                </Card>
+              ))}
+
+              <div className="md:col-span-3 text-center">
+                <Button onClick={next}>Continuar</Button>
+              </div>
+            </motion.div>
+          )}
+
+          {step === 2 && (
+            <motion.div
+              key="quiz"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <Card className="bg-white/10 border-white/20">
+                <CardContent className="p-6 space-y-4">
+                  <h2 className="text-xl font-semibold">Quiz rápido</h2>
+                  <p>{quiz.question}</p>
+
+                  <div className="grid gap-2">
+                    {quiz.options.map((opt, i) => (
+                      <Button
+                        key={i}
+                        variant="outline"
+                        onClick={() => handleAnswer(i)}
+                        className="justify-start"
+                      >
+                        {opt}
+                      </Button>
+                    ))}
+                  </div>
+
+                  {answered && (
+                    <div className="flex items-center gap-2 text-green-300">
+                      <CheckCircle />
+                      {score > 0 ? "Correto!" : "Resposta registrada"}
+                    </div>
+                  )}
+
+                  <Button onClick={next} disabled={!answered}>
+                    Finalizar
+                  </Button>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
+
+          {step === 3 && (
+            <motion.div
+              key="final"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center space-y-4"
+            >
+              <Sparkles className="mx-auto text-yellow-300" size={50} />
+              <h2 className="text-3xl font-bold">Parabéns!</h2>
+              <p className="text-gray-300">
+                Você concluiu a apresentação do curso de obreiros.
+              </p>
+              <Button onClick={() => setStep(0)}>Recomeçar</Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}
